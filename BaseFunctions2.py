@@ -27,6 +27,18 @@ def getTextFilesName(folder, extension="txt"):  # Retourne une liste des noms de
             files_name.append(filename)
     return files_name
 
+def presidentsSpeeches(presidents, folder):                    # Retourne un dictionnaire associant chaque président à
+    president_speeches = {}                                    # son ou ses fichiers de discours.
+    for president in presidents:
+        for file in getTextFilesName(folder):
+            if president in file:
+                if(president in president_speeches.keys()):
+                    president_speeches[president].append(file)
+                else:
+                    president_speeches[president] = [file]
+
+    return president_speeches
+
 ########################################################################################################################
 #FONCTIONS DE BASE
 ########################################################################################################################
@@ -43,18 +55,6 @@ def extractNames(folder, extension="txt"):            # Retourne une de tous les
             presidents.append(name)
 
     return presidents
-
-def presidentsSpeeches(presidents, folder):
-    president_speeches = {}
-    for president in presidents:
-        for file in getTextFilesName(folder):
-            if president in file:
-                if(president in president_speeches.keys()):
-                    president_speeches[president].append(file)
-                else:
-                    president_speeches[president] = [file]
-
-    return president_speeches
 
 def associateName(lastname):            # Associe un prénom à un nom de président.
     return presidentsNames[lastname]
@@ -92,10 +92,6 @@ def removePunctuation(cleanedfolder):                   #cette fonction ne march
         cleanedpath = cleanedfolder + "/" + file
         with open(cleanedpath, "r") as clean:
             lines = clean.readlines()
-            
-            #for line in range(len(lines)):
-            #    for character in range(len(line)):
-            #        if lines[line][character] in punctuation:
             for line in range(len(lines)):
                 for symbol in punctuation_to_space:
                     lines[line] = " ".join(lines[line].split(symbol))
